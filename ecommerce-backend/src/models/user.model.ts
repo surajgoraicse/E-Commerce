@@ -15,7 +15,6 @@ interface IUser extends Document {
 
 	//virtual attribute
 	age: number
-
 }
 
 const userSchema = new mongoose.Schema(
@@ -30,7 +29,7 @@ const userSchema = new mongoose.Schema(
 		},
 		photo: {
 			type: String,
-			required: [true, "Please add ID"],
+			required: [true, "Please add photo"],
 		},
 		role: {
 			type: String,
@@ -50,7 +49,6 @@ const userSchema = new mongoose.Schema(
 		},
 		dob: {
 			type: Date,
-
 			required: ["true", "Please enter Date of Birth"],
 		},
 	},
@@ -64,7 +62,7 @@ userSchema.virtual("age").get(function () {
 	let age = today.getFullYear() - dob.getFullYear();
 	if (
 		dob?.getMonth() > today.getMonth() ||
-		(dob?.getMonth() > today.getMonth() && dob?.getDate > today.getDate)
+		(dob?.getMonth() > today.getMonth() && dob?.getDate() > today.getDate())
 	) {
 		age--;
 	}

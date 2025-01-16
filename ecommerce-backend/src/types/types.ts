@@ -8,7 +8,7 @@ export interface NewUserRequestBody {
 	photo: string;
 }
 
-export type ControllerHandler = (
+export type ControllerType = (
 	req: Request,
 	res: Response,
 	next: NextFunction

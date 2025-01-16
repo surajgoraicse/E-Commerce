@@ -8,13 +8,13 @@ export const newUser = asyncHandler(
 		req: Request<{}, {}, NewUserRequestBody>,
 		res: Response,
 		next: NextFunction
-	): Promise<Response> => {
+	) => {
 		try {
 			const { name, photo, dob, email, gender, _id } = req.body;
 			const user = await User.create({
 				name,
 				photo,
-				dob: new Date(dob),
+				dob,
 				email,
 				gender,
 				_id,

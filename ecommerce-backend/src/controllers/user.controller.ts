@@ -9,25 +9,18 @@ export const newUser = asyncHandler(
 		res: Response,
 		next: NextFunction
 	) => {
-		try {
-			const { name, photo, dob, email, gender, _id } = req.body;
-			const user = await User.create({
-				name,
-				photo,
-				dob,
-				email,
-				gender,
-				_id,
-			});
-			console.log("Welcome ", name);
-			return res
-				.status(201)
-				.json({ statusCode: 201, message: `Welcome, ${name}` });
-		} catch (error) {
-			console.log(error);
-			return res
-				.status(500)
-				.json({ statusCode: 400, message: "User creation failed" });
-		}
+		const { name, photo, dob, email, gender, _id } = req.body;
+		const user = await User.create({
+			name,
+			photo,
+			dob,
+			email,
+			gender,
+			_id,
+		});
+		console.log("Welcome ", name);
+		return res
+			.status(201)
+			.json({ statusCode: 201, message: `Welcome, ${name}` });
 	}
 );

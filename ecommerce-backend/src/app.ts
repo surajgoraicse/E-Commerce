@@ -15,6 +15,8 @@ app.use(
 		limit: "20kb",
 	})
 );
+app.use(express.urlencoded())
+
 
 // importing routes
 import userRoute from "./routes/user.router.js";

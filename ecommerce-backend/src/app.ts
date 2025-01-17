@@ -22,10 +22,11 @@ app.use("/uploads",express.static("uploads"))
 // importing routes
 import userRoute from "./routes/user.router.js";
 import productRoute from "./routes/product.router.js"
+import adminOnly from "./middlewares/auth.middleware.js";
 
 // using routes
 app.use("/api/v1/user", userRoute);
-app.use("/api/v1/product", productRoute);
+app.use("/api/v1/product",adminOnly,  productRoute);
 
 
 

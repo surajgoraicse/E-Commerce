@@ -55,6 +55,8 @@ const userSchema = new mongoose.Schema(
 	{ timestamps: true }
 );
 
+
+// virtual attribute
 userSchema.virtual("age").get(function () {
 	const today = new Date();
 	const dob = this.dob;

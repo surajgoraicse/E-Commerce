@@ -156,34 +156,27 @@ export const getAllProducts = asyncHandler(
 		// pagenation
 		// TODO: sort can be undefined and in that case the value passed will be false which is unexpected
 
-		
 		const productPromise = Product.find(baseQuery)
 			.sort(sort && { price: sort === "asc" ? 1 : -1 })
 			.limit(limit)
 			.skip(skip);
-		
+
 		const [products, allFilterProductCount] = await Promise.all([
 			productPromise,
 			Product.find(baseQuery).countDocuments(),
 		]);
 
-
-		const totalPages = Math.ceil(allFilterProductCount / limit)
+		const totalPages = Math.ceil(allFilterProductCount / limit);
 
 		return res.status(200).json(
 			new ApiResponse(200, "Product fetched successfully", {
 				products,
 				allFilterProductCount,
-				totalPages
+				totalPages,
 			})
 		);
 	}
 );
-
-
-
-
-
 
 // generating products
 
@@ -209,4 +202,17 @@ export const getAllProducts = asyncHandler(
 //   await Product.create(products);
 
 //   console.log({ succecss: true });
+// };
+
+
+// delete ramdom products
+// const deleteRandomProducts = async (count : number = 10) => {
+// 	const products = await Product.find({}).skip(8).limit(count);
+	
+// 	for (let i = 0; i < count; i ++ ){  // TODO: optimise it
+// 		const product = products[i]
+// 		await product.deleteOne()
+// 	}
+
+// 	console.log({success : true});
 // };

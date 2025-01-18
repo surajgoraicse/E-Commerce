@@ -26,7 +26,7 @@ import adminOnly from "./middlewares/auth.middleware.js";
 
 // using routes
 app.use("/api/v1/user", userRoute);
-app.use("/api/v1/product",adminOnly,  productRoute);
+app.use("/api/v1/product",  productRoute);
 
 
 

@@ -1,7 +1,12 @@
+import "dotenv/config";
 import { Request } from "express";
 import fs from "fs";
 import { asyncHandler } from "../utils/asyncHandler.js";
-import { NewProductRequestBody } from "../types/types.js";
+import {
+	BaseQueryType,
+	NewProductRequestBody,
+	SearchRequestQuery,
+} from "../types/types.js";
 import { Product } from "../models/product.model.js";
 import ApiResponse from "../utils/ApiResponse.js";
 import ApiError from "../utils/ApiError.js";
@@ -40,7 +45,7 @@ export const newProduct = asyncHandler(
 );
 
 export const getLatestProducts = asyncHandler(async (req, res, next) => {
-	const products = await Product.find({}).sort({ createdAt: -1 }).limit(5);
+	const products = await Product.find({}).sort({ createdAt: -1 }).limit(10);
 
 	return res
 		.status(200)
@@ -111,7 +116,7 @@ export const updateProduct = asyncHandler(async (req, res, next) => {
 export const deleteProduct = asyncHandler(async (req, res, next) => {
 	const id = req.params.id;
 	if (!mongoose.Types.ObjectId.isValid(id)) {
-		throw new ApiError(404 , "Saale ID sahi bheej")
+		throw new ApiError(404, "Saale ID sahi bheej");
 	}
 	// const product = await Product.findById(id)
 	// product?.deleteOne()
@@ -123,7 +128,50 @@ export const deleteProduct = asyncHandler(async (req, res, next) => {
 	fs.rm(product?.photo, () => {
 		console.log("photo removed successfully");
 	});
-	return res 
+	return res
 		.status(200)
 		.json(new ApiResponse(200, "Product deleted successfully", product));
 });
+
+export const getAllProducts = asyncHandler(
+	async (req: Request<{}, {}, {}, SearchRequestQuery>, res, next) => {
+		const { search, sort, price, category } = req.query;
+		const page = Number(req.query?.page) || 1;
+
+		const limit = Number(process.env.PRODUCT_PER_PAGE) || 8;
+		const skip = limit * (page - 1);
+
+		const baseQuery: BaseQueryType = {};
+
+		if (search) {
+			baseQuery.name = { $regex: search, $options: "i" };
+		}
+		if (price) {
+			baseQuery.price = { $lte: Number(price) };
+		}
+		if (category) {
+			baseQuery.category = category;
+		}
+
+		// pagenation
+		// TODO: sort can be undefined and in that case the value passed will be false which is unexpected
+
+		const productPromise = Product.find(baseQuery)
+			.sort(sort && { price: sort === "asc" ? 1 : -1 })
+			.limit(limit)
+			.skip(skip);
+		
+		const [products, allFilterProductCount] = await Promise.all([
+			productPromise,
+			Product.find(baseQuery).countDocuments(),
+		]);
+
+
+		return res.status(200).json(
+			new ApiResponse(200, "Product fetched successfully", {
+				products,
+				allFilterProductCount,
+			})
+		);
+	}
+);

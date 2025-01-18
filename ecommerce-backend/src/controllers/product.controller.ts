@@ -11,6 +11,7 @@ import { Product } from "../models/product.model.js";
 import ApiResponse from "../utils/ApiResponse.js";
 import ApiError from "../utils/ApiError.js";
 import mongoose from "mongoose";
+import { myCache } from "../app.js";
 
 export const newProduct = asyncHandler(
 	async (req: Request<{}, {}, NewProductRequestBody>, res, next) => {
@@ -44,36 +45,72 @@ export const newProduct = asyncHandler(
 	}
 );
 
+// revalidate on new, update, delete product and on new order TODO:
 export const getLatestProducts = asyncHandler(async (req, res, next) => {
-	const products = await Product.find({}).sort({ createdAt: -1 }).limit(10);
-
+	let products;
+	if (myCache.has("latestProducts")) {
+		products = JSON.parse(myCache.get("latestProducts") as string);
+		console.log("getting data from cache\n");
+	} else {
+		products = await Product.find({}).sort({ createdAt: -1 }).limit(10);
+		myCache.set("latestProducts", JSON.stringify(products), 200);
+		console.log("storing data in cache");
+	}
 	return res
 		.status(200)
 		.json(new ApiResponse(200, "Product fetched successfully", products));
 });
 
+// revalidate on new, update, delete product and on new order TODO:
 export const getAllCategories = asyncHandler(async (req, res, next) => {
 	// const categories = await Product.find({}, { category: 1 });
 	// const list  = categories.map((product)=>{return product.category})
 	// console.log(new Set(list));
 
-	const categories = await Product.distinct("category");
+	let categories;
+	if (myCache.has("categories")) {
+		categories = JSON.parse(myCache.get("categories") as string);
+	} else {
+		categories = await Product.distinct("category");
+		myCache.set("categories", JSON.stringify(categories));
+		console.log("caching categories");
+	}
+
 	return res
 		.status(200)
 		.json(new ApiResponse(200, "Product fetched successfully", categories));
 });
 
+// revalidate on new, update, delete product and on new order TODO:
 export const getAdminProducts = asyncHandler(async (req, res, next) => {
-	const products = await Product.find({});
+	let products;
+	if (myCache.has("all-products")) {
+		products = JSON.parse(myCache.get("all-products") as string);
+	} else {
+		products = await Product.find({});
+		myCache.set("all-products", JSON.stringify(products));
+		console.log("caching all products");
+	}
 
 	return res
 		.status(200)
 		.json(new ApiResponse(200, "Product fetched successfully", products));
 });
 
+
+// revalidate on new, update, delete product and on new order TODO:
 export const getSingleProduct = asyncHandler(async (req, res, next) => {
 	const id = req.params.id;
-	const product = await Product.findById(id);
+	let product;
+	if (myCache.has(`product-${id}`)) {
+		product = JSON.parse(myCache.get(`product-${id}`) as string);
+		console.log("fetching data from cache" , product);
+	} else {
+		product = await Product.findById(id);
+		myCache.set(`product-${id}`, JSON.stringify(product));
+		console.log("caching single product");
+	}
+	
 
 	return res
 		.status(200)
@@ -204,11 +241,10 @@ export const getAllProducts = asyncHandler(
 //   console.log({ succecss: true });
 // };
 
-
 // delete ramdom products
 // const deleteRandomProducts = async (count : number = 10) => {
 // 	const products = await Product.find({}).skip(8).limit(count);
-	
+
 // 	for (let i = 0; i < count; i ++ ){  // TODO: optimise it
 // 		const product = products[i]
 // 		await product.deleteOne()

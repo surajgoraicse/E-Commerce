@@ -2,9 +2,12 @@ import "dotenv/config";
 import express from "express";
 import handleErrorMiddleware from "./middlewares/handleErrorMiddleware.js";
 import { connectDB } from "./utils/db.js";
+import NodeCache from "node-cache";
 
 const port = process.env.PORT || 8000;
 const app = express();
+
+export const myCache = new NodeCache()
 
 // connecting db
 connectDB();

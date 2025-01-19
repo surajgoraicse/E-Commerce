@@ -3,6 +3,7 @@ import express from "express";
 import handleErrorMiddleware from "./middlewares/handleErrorMiddleware.js";
 import { connectDB } from "./utils/db.js";
 import NodeCache from "node-cache";
+import morgan from "morgan";
 
 const port = process.env.PORT || 8000;
 const app = express();
@@ -20,17 +21,19 @@ app.use(
 );
 app.use(express.urlencoded())
 app.use("/uploads",express.static("uploads"))
-
+app.use( morgan("dev"))
 
 // importing routes
 import userRoute from "./routes/user.router.js";
 import productRoute from "./routes/product.router.js"
-import adminOnly from "./middlewares/auth.middleware.js";
+import ordersRoute from "./routes/orders.router.js"
+
+
 
 // using routes
 app.use("/api/v1/user", userRoute);
 app.use("/api/v1/product",  productRoute);
-
+app.use("/api/v1/orders" , ordersRoute)
 
 
 app.use(handleErrorMiddleware);

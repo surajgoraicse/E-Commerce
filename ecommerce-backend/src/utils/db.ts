@@ -14,7 +14,3 @@ export const connectDB = async () => {
 		});
 };
 
-
-export const invalidateCache = () => {
-	 
-}

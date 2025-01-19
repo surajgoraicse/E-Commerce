@@ -55,16 +55,21 @@ const orderSchema = new mongoose.Schema(
 			enum: ["PROCESSING", "SHIPPED", "DELIVERED"],
 			default: "PROCESSING",
 		},
-		orderItems: {
-			name: String,
-			photo: String,
-			price: Number,
-			quantity: Number,
-			productId: {
-				type: mongoose.Types.ObjectId,
-				ref: "Product",
+		orderItems: [
+			{
+				name: {
+					type: String,
+				},
+				photo: String,
+				price: Number,
+				quantity: Number,
+				productId: {
+					type: mongoose.Types.ObjectId,
+					ref: "Product",
+					required: true,
+				},
 			},
-		},
+		],
 	},
 	{ timestamps: true }
 );

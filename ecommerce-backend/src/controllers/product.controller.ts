@@ -15,7 +15,7 @@ import { myCache } from "../app.js";
 import { invalidateCache } from "../utils/features.utils.js";
 
 
-// revalidate on new, update, delete product and on new order TODO:
+// caching
 export const getLatestProducts = asyncHandler(async (req, res, next) => {
 	let products;
 	if (myCache.has("latestProducts")) {
@@ -31,7 +31,7 @@ export const getLatestProducts = asyncHandler(async (req, res, next) => {
 		.json(new ApiResponse(200, "Product fetched successfully", products));
 });
 
-// revalidate on new, update, delete product and on new order TODO:
+// caching
 export const getAllCategories = asyncHandler(async (req, res, next) => {
 	// const categories = await Product.find({}, { category: 1 });
 	// const list  = categories.map((product)=>{return product.category})
@@ -51,7 +51,7 @@ export const getAllCategories = asyncHandler(async (req, res, next) => {
 		.json(new ApiResponse(200, "Product fetched successfully", categories));
 });
 
-// revalidate on new, update, delete product and on new order TODO:
+// caching
 export const getAdminProducts = asyncHandler(async (req, res, next) => {
 	let products;
 	if (myCache.has("all-products")) {
@@ -68,7 +68,7 @@ export const getAdminProducts = asyncHandler(async (req, res, next) => {
 });
 
 
-// revalidate on new, update, delete product and on new order TODO:
+// caching
 export const getSingleProduct = asyncHandler(async (req, res, next) => {
 	const id = req.params.id;
 	let product;

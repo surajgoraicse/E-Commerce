@@ -1,6 +1,6 @@
 import { myCache } from "../app.js";
 import { Product } from "../models/product.model.js";
-import { InvalidateCacheProps } from "../types/types.js";
+import { InvalidateCacheProps, orderItemsType } from "../types/types.js";
 
 export const invalidateCache = async ({
 	product,
@@ -24,3 +24,17 @@ export const invalidateCache = async ({
 	if (admin) {
 	}
 };
+
+
+export const reduceStock = async (orderItems : orderItemsType[]) => {
+	for (let i = 0; i < orderItems.length; i++){
+		const order = orderItems[i]
+		const product = await Product.findById(order.productId)
+		if (!product) {
+			throw new Error( "Product not found")
+		}
+		// TODO:  check if sufficient stock is present or not
+		product.stock -= order.quantity
+		await product.save();
+	}
+}

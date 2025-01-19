@@ -46,13 +46,13 @@ export type InvalidateCacheProps = {
 };
 
 export type shippingInfoType = {
-	address : string,
+	address: string,
 	city: string,
 	state : string,
 	country : string,
 	pincode : number,
 };
-export type orderItems = {
+export type orderItemsType = {
 	name: string;
 	photo: string;
 	price: number;
@@ -69,5 +69,5 @@ export interface NewOrderRequestBody {
 	discount: number;
 	total: number;
 	status: string;
-	orderItems: orderItems[];
+	orderItems: orderItemsType[];
 }

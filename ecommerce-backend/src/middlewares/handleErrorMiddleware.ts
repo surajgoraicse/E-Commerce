@@ -23,7 +23,10 @@ const handleErrorMiddleware = (
 	// Log the error
 	console.error("Error occurred:", errorResponse);
 	// console.error("Error stack:", err?.stack);
-
+	if (err.name == "CastError") {
+		errorResponse.message = "Invalid Id";
+		res.status(errorResponse.statusCode).json(errorResponse);
+	}
 	// Send the response
 	res.status(errorResponse.statusCode).json(errorResponse);
 };

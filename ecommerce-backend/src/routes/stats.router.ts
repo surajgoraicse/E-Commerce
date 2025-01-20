@@ -1,6 +1,6 @@
 import express from "express"
 import adminOnly from "../middlewares/auth.middleware.js"
-import { getDashboardStats, getPieCharts } from "../controllers/stats.controller.js"
+import { getBarCharts, getDashboardStats, getPieCharts } from "../controllers/stats.controller.js"
 
 
 const app = express.Router()
@@ -13,7 +13,7 @@ app.get("/stats" , getDashboardStats)
 app.get("/pie" , getPieCharts)
 
 // route /api/v1/dashboard/bar
-app.get("/bar")
+app.get("/bar" ,getBarCharts)
 
 // route /api/v1/dashboard/line
 app.get("/line")

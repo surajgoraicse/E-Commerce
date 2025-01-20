@@ -163,7 +163,7 @@ export const getDashboardStats = asyncHandler(async (req, res, next) => {
 
 	lastSixMonthOrders.forEach((order) => {
 		const creationDate = order.createdAt;
-		const monthDiff = today.getMonth() - creationDate.getMonth();
+		const monthDiff = (today.getMonth() - creationDate.getMonth() + 12) % 12;
 
 		if (monthDiff < 6) {
 			orderMonthCounts[6 - monthDiff - 1] += 1;
@@ -347,7 +347,56 @@ export const getPieCharts = asyncHandler(async (req, res, next) => {
 });
 
 // route /api/v1/dashboard/bar
-export const getBarCharts = asyncHandler(async (req, res, next) => {});
+export const getBarCharts = asyncHandler(async (req, res, next) => {
+	let charts = {};
+	const key = "adminBarCharts";
+	if (myCache.has(key)) {
+		charts = JSON.parse(myCache.get(key) as string);
+		return res
+			.status(200)
+			.json(
+				new ApiResponse(
+					200,
+					"Admin bar chart data fetched successfully",
+					charts
+				)
+			);
+	}
+
+	const today = new Date();
+	const sixMonthsAgo = new Date(today.getMonth() - 6);
+	const twelveMonthsAgo = new Date(today.getMonth() - 12);
+
+
+	const sixMonthOrderPromise = Product.find({
+		createdAt: {
+			$gte: sixMonthsAgo,
+			$lte: today
+		}
+	})
+
+	const sixMonthProductPromise = Product.find({
+		createdAt: {
+			$gte: sixMonthsAgo,
+			$lte: today
+		}
+	})
+
+
+	// const [] = await Promise.all([
+	// 	Product.find({createdAt : })
+	// ])
+
+
+
+
+	myCache.set(key, JSON.stringify(charts));
+	return res
+		.status(200)
+		.json(
+			new ApiResponse(200, "Admin bar chart data fetched successfully", charts)
+		);
+});
 
 // route /api/v1/dashboard/line
 export const getLineCharts = asyncHandler(async (req, res, next) => {});

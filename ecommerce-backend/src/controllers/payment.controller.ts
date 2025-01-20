@@ -4,7 +4,27 @@ import { NewCouponRequestBody } from "../types/types.js";
 import ApiError from "../utils/ApiError.js";
 import { Coupon } from "../models/coupon.model.js";
 import ApiResponse from "../utils/ApiResponse.js";
-import { myCache } from "../app.js";
+import { myCache} from "../app.js";
+
+// export const createPaymentIntent = asyncHandler(async (req, res, next) => {
+// 	const { amount } = req.body;
+// 	if (!amount) {
+// 		return next(new ApiError(400, "Please enter amount"));
+// 	}
+
+// 	const paymentIntent = await stripe.paymentIntents.create({
+// 		amount: Number(amount) * 100,
+// 		currency: "inr",
+// 	});
+
+// 	return res
+// 		.status(200)
+// 		.json(
+// 			new ApiResponse(200, "success ", {
+// 				clientSecret: paymentIntent.client_secret,
+// 			})
+// 		);
+// });
 
 export const generateCoupon = asyncHandler(
 	async (req: Request<{}, {}, NewCouponRequestBody>, res, next) => {

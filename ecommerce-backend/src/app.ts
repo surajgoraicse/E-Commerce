@@ -4,10 +4,15 @@ import handleErrorMiddleware from "./middlewares/handleErrorMiddleware.js";
 import { connectDB } from "./utils/db.js";
 import NodeCache from "node-cache";
 import morgan from "morgan";
+import Stripe from "stripe";
+
 
 const port = process.env.PORT || 8000;
+const stripeKey = process.env.STRIPE_KEY || ""
 const app = express();
 
+
+// export const stripe = new Stripe(stripeKey)
 export const myCache = new NodeCache()
 
 // connecting db

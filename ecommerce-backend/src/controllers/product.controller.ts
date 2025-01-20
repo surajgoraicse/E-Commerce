@@ -158,7 +158,7 @@ export const newProduct = asyncHandler(
 			photo: photo?.path,
 		});
 		if (product) {
-			await invalidateCache({product : true})
+			await invalidateCache({product : true , admin : true})
 			return res
 				.status(201)
 				.json(new ApiResponse(201, "Product created successfully", product));
@@ -194,7 +194,7 @@ export const updateProduct = asyncHandler(async (req, res, next) => {
 
 	const newProduct = await product.save();
 	// console.log(newProduct);
-	await invalidateCache({product : true})
+	await invalidateCache({product : true , admin : true})
 
 	return res
 		.status(200)
@@ -217,7 +217,7 @@ export const deleteProduct = asyncHandler(async (req, res, next) => {
 		console.log("photo removed successfully");
 	});
 
-	await invalidateCache({product : true})
+	await invalidateCache({product : true , admin : true})
 
 	return res
 		.status(200)

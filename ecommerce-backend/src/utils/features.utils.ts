@@ -32,7 +32,7 @@ export const invalidateCache = async ({
 		myCache.del(orderKeys);
 	}
 	if (admin) {
-		const adminKeys : string[]= ["adminStats" , "admin-pie-charts"]
+		const adminKeys : string[]= ["adminStats" , "admin-pie-charts" , "adminBarCharts"]
 		
 
 

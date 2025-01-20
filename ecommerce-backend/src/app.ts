@@ -27,6 +27,7 @@ app.use( morgan("dev"))
 import userRoute from "./routes/user.router.js";
 import productRoute from "./routes/product.router.js"
 import ordersRoute from "./routes/orders.router.js"
+import paymentRoute from  "./routes/payment.router.js"
 
 
 
@@ -34,6 +35,7 @@ import ordersRoute from "./routes/orders.router.js"
 app.use("/api/v1/user", userRoute);
 app.use("/api/v1/product",  productRoute);
 app.use("/api/v1/orders" , ordersRoute)
+app.use("/api/v1/payment" , paymentRoute)
 
 
 

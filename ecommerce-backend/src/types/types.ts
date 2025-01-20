@@ -73,3 +73,9 @@ export interface NewOrderRequestBody {
 	status: string;
 	orderItems: orderItemsType[];
 }
+
+
+export type NewCouponRequestBody ={
+	coupon: string,
+	amount: number
+}

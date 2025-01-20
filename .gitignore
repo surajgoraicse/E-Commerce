@@ -1,4 +1,5 @@
 # General exclusions
+
 .DS_Store
 Thumbs.db
 node_modules/
@@ -27,3 +28,4 @@ ecommerce-backend/.env.local
 ecommerce-backend/logs/
 ecommerce-backend/tmp/
 ecommerce-backend/uploads/
+ecommerce-backend/todo.md
